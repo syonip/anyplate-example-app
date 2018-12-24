@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AnyPlate Example App</string>
+    <string name="action_clear">Clear All</string>
+</resources>
