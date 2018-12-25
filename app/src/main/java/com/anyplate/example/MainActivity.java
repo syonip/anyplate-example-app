@@ -1,13 +1,16 @@
 package com.anyplate.example;
 
 import android.app.Activity;
-import android.app.FragmentManager;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,9 +31,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_CODE = 1;
+    private static final String TAG = "AnyPlateExample";
     PlateAdapter listViewAdapter;
     static int scanCounter = 0;
-    private WorkerFragment workerFragment;
     private static final String TAG_WORKER_FRAGMENT = "WorkerFragment";
 
     @Override
@@ -40,15 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
         final Activity activity = this;
 
-        FragmentManager fm = getFragmentManager();
-        workerFragment = (WorkerFragment) fm.findFragmentByTag(TAG_WORKER_FRAGMENT);
+        FragmentManager fm = getSupportFragmentManager();
+        WorkerFragment workerFragment = (WorkerFragment) fm.findFragmentByTag(TAG_WORKER_FRAGMENT);
 
-        // create the fragment and data the first time
         if (workerFragment == null) {
-            // add the fragment
             workerFragment = new WorkerFragment();
             fm.beginTransaction().add(workerFragment, TAG_WORKER_FRAGMENT).commit();
-            // load data from a data source or perform any calculation
             workerFragment.setData(new ArrayList<LicensePlate>());
         }
 
@@ -68,7 +68,25 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setAction("com.anyplate.app.RUN");
-                startActivityForResult(intent, REQUEST_CODE);
+                try {
+                    startActivityForResult(intent, REQUEST_CODE);
+                } catch (ActivityNotFoundException e) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setMessage(R.string.download_message)
+                            .setTitle(R.string.download_title);
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            String appPackageName = "com.anyplate.app";
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
             }
         });
 
@@ -84,8 +102,7 @@ public class MainActivity extends AppCompatActivity {
         listViewAdapter.clear();
         if (dir.exists()) {
             File[] files = dir.listFiles();
-            for (int i = 0; i < files.length; ++i) {
-                File file = files[i];
+            for (File file : files) {
                 String absolutePath = file.getAbsolutePath();
                 String extension = absolutePath.substring(absolutePath.lastIndexOf("."));
                 if (extension.equals(".jpg")) {
@@ -112,37 +129,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        // This is where the AnyPlate result is received
         if (data == null) return;
 
         final Activity activity = this;
 
-        // Check which request we're responding to
         if (requestCode == REQUEST_CODE) {
-
-            // Make sure the request was successful
+            // Checking if recognition was successful
             if (resultCode == RESULT_OK) {
+                // Getting the recognized plate image uri
                 final Uri uri = data.getData();
                 if (uri == null) return;
 
-//                final Bitmap finalBitmap = bitmap;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Bitmap bitmap = null;
                         try {
-                            // Works with content://, file://, or android.resource:// URIs
                             InputStream inputStream =
                                     getContentResolver().openInputStream(uri);
                             bitmap = BitmapFactory.decodeStream(inputStream);
                         } catch (FileNotFoundException e) {
                             // Inform the user that things have gone horribly wrong
-                            Log.e("TEST", e.toString());
+                            Log.e(TAG, e.toString());
                         }
 
+                        // Getting the recognized plate number
                         String plateNumber = data.getStringExtra("PlateNumber");
+
+                        // Getting the average recognition confidence
                         float confidence = data.getFloatExtra("Confidence", 0f);
 
-//                        File source = new File(uri.toString());
                         Long tsLong = System.currentTimeMillis()/1000;
                         String ts = tsLong.toString();
                         String fileName = ts+"_"+plateNumber+"_"+confidence+".jpg";
@@ -166,8 +183,7 @@ public class MainActivity extends AppCompatActivity {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(destPath);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -183,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -205,12 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_clear) {
             deleteSavedImages();
             return true;

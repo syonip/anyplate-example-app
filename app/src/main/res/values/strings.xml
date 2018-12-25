@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">AnyPlate Example App</string>
     <string name="action_clear">Clear All</string>
+    <string name="download_message">Click OK to download the AnyPlate app from Google Play Store</string>
+    <string name="download_title">AnyPlate app missing</string>
+    <string name="ok">Download</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
