@@ -5,5 +5,8 @@
     <string name="download_title">AnyPlate app missing</string>
     <string name="ok">Download</string>
     <string name="cancel">Cancel</string>
+    <string name="play_store_url">https://play.google.com/store/apps/details?id=</string>
+    <string name="anyplate_package_name">com.anyplate.app</string>
+    <string name="anyplate_run_intent">com.anyplate.app.RUN</string>
 
 </resources>

@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setAction("com.anyplate.app.RUN");
+                intent.setAction(getString(R.string.anyplate_run_intent));
                 try {
                     startActivityForResult(intent, REQUEST_CODE);
                 } catch (ActivityNotFoundException e) {
@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
                             .setTitle(R.string.download_title);
                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            String appPackageName = "com.anyplate.app";
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                            String appPackageName = getString(R.string.anyplate_package_name);
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.play_store_url) + appPackageName)));
                         }
                     });
                     builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
