@@ -70,10 +70,5 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             mPlateNumView = view.findViewById(R.id.plate_number);
             mConfView = view.findViewById(R.id.confidence);
         }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mPlateNumView.getText() + "'";
-        }
     }
 }

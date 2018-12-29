@@ -1,6 +1,7 @@
 package com.anyplate.example;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothManager;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,8 +10,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -31,13 +34,18 @@ public class MainActivity extends AppCompatActivity
     static final int REQUEST_CODE = 1;
     private static final String TAG = "AnyPlateExample";
     static int scanCounter = 0;
-
+    private RecyclerView recyclerView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (recyclerView == null) {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment);
+            recyclerView = (RecyclerView) currentFragment.getView();
+        }
 
         final Activity activity = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -134,6 +142,7 @@ public class MainActivity extends AppCompatActivity
                         newLicensePlate.PlateNumber = plateNumber;
                         newLicensePlate.Confidence = confidence;
                         LicensePlateContent.addItem(newLicensePlate);
+                        recyclerView.getAdapter().notifyDataSetChanged();
                     }
                 });
             }
