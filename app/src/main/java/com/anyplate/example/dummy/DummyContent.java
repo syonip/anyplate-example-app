@@ -1,5 +1,10 @@
 package com.anyplate.example.dummy;
 
+import android.net.Uri;
+
+import com.anyplate.example.LicensePlate;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,11 +30,41 @@ public class DummyContent {
 
     private static final int COUNT = 25;
 
+//    private static void loadSavedImages(File dir) {
+//        listViewAdapter.clear();
+//        if (dir.exists()) {
+//            File[] files = dir.listFiles();
+//            for (File file : files) {
+//                String absolutePath = file.getAbsolutePath();
+//                String extension = absolutePath.substring(absolutePath.lastIndexOf("."));
+//                if (extension.equals(".jpg")) {
+//                    loadImage(file);
+//                }
+//            }
+//        }
+//    }
+//
+//    private static void loadImage(File file) {
+//        LicensePlate newLicensePlate = new LicensePlate();
+//        String fileNameWithOutExt = file.getName().replaceFirst("[.][^.]+$", "");
+//        String[] separated = fileNameWithOutExt.split("_");
+//
+//        newLicensePlate.PlateImage = Uri.fromFile(file);
+//        if (separated.length >= 2) {
+//            newLicensePlate.PlateNumber = separated[1];
+//        }
+//        if (separated.length >= 3) {
+//            newLicensePlate.Confidence = Float.parseFloat(separated[2]);
+//        }
+//        listViewAdapter.add(newLicensePlate);
+//    }
+//
     static {
-        // Add some sample items.
+//         Add some sample items.
         for (int i = 1; i <= COUNT; i++) {
             addItem(createDummyItem(i));
         }
+
     }
 
     private static void addItem(DummyItem item) {

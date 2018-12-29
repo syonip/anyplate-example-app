@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.anyplate.example.R;
+import com.anyplate.example.dummy.DummyContent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,13 +29,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements ItemFragment.OnListFragmentInteractionListener{
 
     static final int REQUEST_CODE = 1;
     private static final String TAG = "AnyPlateExample";
     PlateAdapter listViewAdapter;
     static int scanCounter = 0;
     private static final String TAG_WORKER_FRAGMENT = "WorkerFragment";
+    private static final String TAG_ITEM_FRAGMENT = "ItemFragment";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
         final Activity activity = this;
 
-        FragmentManager fm = getSupportFragmentManager();
-        WorkerFragment workerFragment = (WorkerFragment) fm.findFragmentByTag(TAG_WORKER_FRAGMENT);
+//        FragmentManager fm = getSupportFragmentManager();
+//        ItemFragment workerFragment = (ItemFragment) fm.findFragmentByTag(TAG_ITEM_FRAGMENT);
 
-        if (workerFragment == null) {
-            workerFragment = new WorkerFragment();
-            fm.beginTransaction().add(workerFragment, TAG_WORKER_FRAGMENT).commit();
-            workerFragment.setData(new ArrayList<LicensePlate>());
-        }
+//        if (workerFragment == null) {
+//            workerFragment = new ItemFragment();
+//            fm.beginTransaction().add(workerFragment, TAG_ITEM_FRAGMENT).commit();
+            //workerFragment.setData(new ArrayList<LicensePlate>());
+//        }
 
-        ArrayList<LicensePlate> licensePlates = workerFragment.getData();
+//        ArrayList<LicensePlate> licensePlates = new ArrayList<LicensePlate>(); //workerFragment.getData();
 
-        ListView listView = findViewById(R.id.list_view);
+//        ListView listView = findViewById(R.id.list_view);
 
-        listViewAdapter = new PlateAdapter(this, licensePlates);
-        listView.setAdapter(listViewAdapter);
+//        listViewAdapter = new PlateAdapter(this, licensePlates);
+//        listView.setAdapter(listViewAdapter);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -93,39 +98,12 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                loadSavedImages(activity.getFilesDir());
+//                loadSavedImages(activity.getFilesDir());
             }
         });
     }
 
-    private void loadSavedImages(File dir) {
-        listViewAdapter.clear();
-        if (dir.exists()) {
-            File[] files = dir.listFiles();
-            for (File file : files) {
-                String absolutePath = file.getAbsolutePath();
-                String extension = absolutePath.substring(absolutePath.lastIndexOf("."));
-                if (extension.equals(".jpg")) {
-                    loadImage(file);
-                }
-            }
-        }
-    }
 
-    private void loadImage(File file) {
-        LicensePlate newLicensePlate = new LicensePlate();
-        String fileNameWithOutExt = file.getName().replaceFirst("[.][^.]+$", "");
-        String[] separated = fileNameWithOutExt.split("_");
-
-        newLicensePlate.PlateImage = Uri.fromFile(file);
-        if (separated.length >= 2) {
-            newLicensePlate.PlateNumber = separated[1];
-        }
-        if (separated.length >= 3) {
-            newLicensePlate.Confidence = Float.parseFloat(separated[2]);
-        }
-        listViewAdapter.add(newLicensePlate);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -227,5 +205,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 }
