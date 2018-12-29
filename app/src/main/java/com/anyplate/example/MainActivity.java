@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static com.anyplate.example.dummy.DummyContent.loadSavedImages;
+
 public class MainActivity extends AppCompatActivity
         implements ItemFragment.OnListFragmentInteractionListener{
 
@@ -98,12 +100,10 @@ public class MainActivity extends AppCompatActivity
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                loadSavedImages(activity.getFilesDir());
+                loadSavedImages(activity.getFilesDir());
             }
         });
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(LicensePlate item) {
 
     }
 }

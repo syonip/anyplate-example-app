@@ -6,4 +6,5 @@ public class LicensePlate {
     public String PlateNumber;
     public float Confidence;
     public Uri PlateImage;
+    public String id;
 }

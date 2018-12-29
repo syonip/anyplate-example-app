@@ -21,53 +21,52 @@ public class DummyContent {
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<LicensePlate> ITEMS = new ArrayList<>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static final Map<String, LicensePlate> ITEM_MAP = new HashMap<>();
 
     private static final int COUNT = 25;
 
-//    private static void loadSavedImages(File dir) {
-//        listViewAdapter.clear();
-//        if (dir.exists()) {
-//            File[] files = dir.listFiles();
-//            for (File file : files) {
-//                String absolutePath = file.getAbsolutePath();
-//                String extension = absolutePath.substring(absolutePath.lastIndexOf("."));
-//                if (extension.equals(".jpg")) {
-//                    loadImage(file);
-//                }
-//            }
-//        }
-//    }
-//
-//    private static void loadImage(File file) {
-//        LicensePlate newLicensePlate = new LicensePlate();
-//        String fileNameWithOutExt = file.getName().replaceFirst("[.][^.]+$", "");
-//        String[] separated = fileNameWithOutExt.split("_");
-//
-//        newLicensePlate.PlateImage = Uri.fromFile(file);
-//        if (separated.length >= 2) {
-//            newLicensePlate.PlateNumber = separated[1];
-//        }
-//        if (separated.length >= 3) {
-//            newLicensePlate.Confidence = Float.parseFloat(separated[2]);
-//        }
-//        listViewAdapter.add(newLicensePlate);
-//    }
-//
+    public static void loadSavedImages(File dir) {
+        if (dir.exists()) {
+            File[] files = dir.listFiles();
+            for (File file : files) {
+                String absolutePath = file.getAbsolutePath();
+                String extension = absolutePath.substring(absolutePath.lastIndexOf("."));
+                if (extension.equals(".jpg")) {
+                    loadImage(file);
+                }
+            }
+        }
+    }
+
+    private static void loadImage(File file) {
+        LicensePlate newLicensePlate = new LicensePlate();
+        String fileNameWithOutExt = file.getName().replaceFirst("[.][^.]+$", "");
+        String[] separated = fileNameWithOutExt.split("_");
+
+        newLicensePlate.PlateImage = Uri.fromFile(file);
+        if (separated.length >= 2) {
+            newLicensePlate.PlateNumber = separated[1];
+        }
+        if (separated.length >= 3) {
+            newLicensePlate.Confidence = Float.parseFloat(separated[2]);
+        }
+        addItem(newLicensePlate);
+    }
+
     static {
 //         Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
-        }
+//        for (int i = 1; i <= COUNT; i++) {
+//            addItem(createDummyItem(i));
+//        }
 
     }
 
-    private static void addItem(DummyItem item) {
+    private static void addItem(LicensePlate item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
