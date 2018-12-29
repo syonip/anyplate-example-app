@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
         LicensePlateContent.ITEMS.clear();
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override

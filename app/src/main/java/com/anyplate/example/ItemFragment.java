@@ -1,8 +1,10 @@
 package com.anyplate.example;
 
 import android.content.Context;
+import android.gesture.GestureOverlayView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,11 +61,17 @@ public class ItemFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
+            RecyclerView.LayoutManager layoutManager;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                layoutManager = new LinearLayoutManager(context);
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                layoutManager = new GridLayoutManager(context, mColumnCount);
             }
+            recyclerView.setLayoutManager(layoutManager);
+
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                    ((LinearLayoutManager) layoutManager).getOrientation());
+            recyclerView.addItemDecoration(dividerItemDecoration);
             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(LicensePlateContent.ITEMS, mListener));
         }
         return view;
