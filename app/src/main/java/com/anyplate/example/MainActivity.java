@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,19 +16,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-
-import com.anyplate.example.R;
-import com.anyplate.example.dummy.DummyContent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
-import static com.anyplate.example.dummy.DummyContent.loadSavedImages;
+import static com.anyplate.example.LicensePlateContent.loadSavedImages;
 
 public class MainActivity extends AppCompatActivity
         implements ItemFragment.OnListFragmentInteractionListener{
@@ -49,23 +43,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         final Activity activity = this;
-
-//        FragmentManager fm = getSupportFragmentManager();
-//        ItemFragment workerFragment = (ItemFragment) fm.findFragmentByTag(TAG_ITEM_FRAGMENT);
-
-//        if (workerFragment == null) {
-//            workerFragment = new ItemFragment();
-//            fm.beginTransaction().add(workerFragment, TAG_ITEM_FRAGMENT).commit();
-            //workerFragment.setData(new ArrayList<LicensePlate>());
-//        }
-
-//        ArrayList<LicensePlate> licensePlates = new ArrayList<LicensePlate>(); //workerFragment.getData();
-
-//        ListView listView = findViewById(R.id.list_view);
-
-//        listViewAdapter = new PlateAdapter(this, licensePlates);
-//        listView.setAdapter(listViewAdapter);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -97,12 +74,21 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                loadSavedImages(activity.getFilesDir());
-            }
-        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (LicensePlateContent.ITEMS.size() == 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadSavedImages(getApplicationContext().getFilesDir());
+                }
+            });
+        }
     }
 
     @Override
