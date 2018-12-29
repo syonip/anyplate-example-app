@@ -54,7 +54,7 @@ class LicensePlateContent {
     }
 
 
-    private static void addItem(LicensePlate item) {
+    static void addItem(LicensePlate item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }

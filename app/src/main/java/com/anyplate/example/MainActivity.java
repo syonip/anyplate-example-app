@@ -30,10 +30,7 @@ public class MainActivity extends AppCompatActivity
 
     static final int REQUEST_CODE = 1;
     private static final String TAG = "AnyPlateExample";
-    PlateAdapter listViewAdapter;
     static int scanCounter = 0;
-    private static final String TAG_WORKER_FRAGMENT = "WorkerFragment";
-    private static final String TAG_ITEM_FRAGMENT = "ItemFragment";
 
 
 
@@ -136,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                         newLicensePlate.PlateImage = Uri.fromFile(dest);
                         newLicensePlate.PlateNumber = plateNumber;
                         newLicensePlate.Confidence = confidence;
-                        listViewAdapter.add(newLicensePlate);
+                        LicensePlateContent.addItem(newLicensePlate);
                     }
                 });
             }
@@ -179,7 +176,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-        listViewAdapter.clear();
+        LicensePlateContent.ITEMS.clear();
     }
 
     @Override
