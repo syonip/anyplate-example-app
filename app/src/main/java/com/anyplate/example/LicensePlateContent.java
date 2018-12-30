@@ -10,17 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
- */
 class LicensePlateContent {
-
-    /**
-     * An array of sample (dummy) items.
-     */
     static final List<LicensePlate> ITEMS = new ArrayList<>();
 
     private static final Map<String, LicensePlate> ITEM_MAP = new HashMap<>();
